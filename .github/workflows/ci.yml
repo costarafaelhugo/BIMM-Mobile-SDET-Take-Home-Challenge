@@ -1,0 +1,28 @@
+name: iOS Test Automation CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Xcode
+        uses: macos-setup@v1
+
+      - name: Install dependencies
+        run: |
+          brew install cocoapods
+          pod install
+
+      - name: Run Tests
+        run: |
+          xcodebuild test -scheme RemindersApp -destination 'platform=iOS Simulator,name=iPhone 14' | xcpretty
